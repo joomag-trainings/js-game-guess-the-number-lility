@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        
+        body{
+            background-image: url("https://s-media-cache-ak0.pinimg.com/originals/88/f1/45/88f145383499e51d8958a3120117e783.jpg");
+
+        }
+        h1{
+            font-weight: bolder;
+            font-size: 80px;
+            color: darkblue;
+            font-style: oblique;
+            margin-left: 50%;
+            margin-top: 5%;
+        }
+
+        div{
+            position: absolute;
+            text-align: center;
+            top:30%;
+            left: 60%;
+        }
+        p{
+            font-size:30px ;
+            font-style: oblique;
+            color: darkblue;
+            font-weight: bold;
+        }
+        #resultMessage{
+            font-size: 50px;
+            color: black;
+            font-weight: bold;
+        }
+        input{
+            font-size: larger;
+        }
+        button, #resetButton {
+            font-weight: bold;
+
+            font-style: oblique;
+            font-size: large;
+            margin: 20px;
+            margin-bottom: 10px;
+            height: auto;
+            background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #408c99), color-stop(1, #599bb3));
+            background:-moz-linear-gradient(top, #408c99 5%, #599bb3 100%);
+            background:-webkit-linear-gradient(top, #408c99 5%, #599bb3 100%);
+            background:-o-linear-gradient(top, #408c99 5%, #599bb3 100%);
+            background:-ms-linear-gradient(top, #408c99 5%, #599bb3 100%);
+            background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#408c99', endColorstr='#599bb3',GradientType=0);
+            background-color:#408c99;
+        }
+        #resetButton {
+            font-size: large;
+            margin-top: 25%;
+            margin-left: 67%;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Guess the number!</h1>
+    <div>
+        <p id = "resultMessage"></p>
+
+        <input type="text" name="number" id="guessInput">
+        <br>
+        <button id="guessSubmit">Submit</button>
+        <p id="lowerOrHigher"> </p>
+
+        <p id="attemptCountText"> Your attempts: </p>
+        <p id="numberOfAttempts">You have 10 attempts </p>
+    </div>
+
+
+    <script>
+
+        var randomNumber;
+        var attemptsCount = 0;
+        var guessInput = document.getElementById('guessInput');
+        var lowerOrHigher = document.getElementById('lowerOrHigher');
+        var resultMessage = document.getElementById('resultMessage');
+        var guessSubmit = document.getElementById('guessSubmit');
+        var attemptCountText = document.getElementById('attemptCountText');
+        var numberOfAttempts = document.getElementById('numberOfAttempts');
+
+
+
+
+        function generaterandomNumber () {
+            return Math.floor(Math.random()*100);
+        }
+
+        function gameOver() {
+
+            guessSubmit.disabled = 'disabled';
+            guessInput.disabled = 'disabled';
+
+            var resetButton = document.createElement('button');
+            resetButton.id = 'resetButton';
+            resetButton.textContent= 'RESET';
+            resetButton.value = 'reset';
+            resetButton.addEventListener('click', reset);
+
+            document.body.appendChild(resetButton);
+
+
+        }
+
+        function guessNumber() {
+            attemptsCount++;
+            numberOfAttempts.textContent = '';
+            numberOfAttempts.textContent = 'You have '+ (10-attemptsCount) +' attempts left';
+            attemptCountText.textContent =  attemptCountText.textContent + guessInput.value + ' ';
+            var submittedNumber = parseInt(guessInput.value);
+            if (submittedNumber === randomNumber){
+
+                    resultMessage.textContent = 'Congratulation! You won!';
+                    gameOver();
+            }else{
+
+                if (attemptsCount < 10) {
+
+                    if (submittedNumber < randomNumber) {
+
+                        lowerOrHigher.textContent = 'Last guess was too low!';
+
+                    } else {
+                        lowerOrHigher.textContent = 'Last guess was too high!';
+                    }
+                }else {
+                    gameOver();
+                }
+            }
+
+            guessInput.value = '';
+            guessInput.focus();
+
+        }
+
+        function reset() {
+
+            guessInput.removeAttribute('disabled');
+            guessSubmit.removeAttribute('disabled');
+
+            attemptsCount = 0;
+            randomNumber = generaterandomNumber();
+
+            var resetButton = document.getElementById('resetButton');
+            document.body.removeChild(resetButton);
+            lowerOrHigher.textContent = '';
+            resultMessage.textContent = '';
+            attemptCountText.textContent = 'Your attempts:';
+            numberOfAttempts.textContent = 'You have 10 attempts';
+
+        }
+
+        randomNumber = generaterandomNumber();
+        guessSubmit.addEventListener('click', guessNumber);
+
+
+//attemptes count, attempts
+
+    </script>
+
+</body>
+</html>
